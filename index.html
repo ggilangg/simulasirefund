@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b7a44">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Refund">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Hitung Refund</title>
+<style>
+:root{--bg:#eef3ef;--c:#fff;--t:#13211a;--m:#5d6e64;--g:#0b7a44;--g2:#e3f4ea;--b:#d8e2dc;--r:#c5372c;--w:#fff4d6}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1511;--c:#16211b;--t:#e7f0ea;--m:#97aa9f;--g:#3fcf84;--g2:#17301f;--b:#28372e;--r:#ff7b70;--w:#3a3113}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0}
+body{font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--t);display:flex;flex-direction:column}
+header{background:#0b7a44;color:#fff;padding:calc(env(safe-area-inset-top,0px) + 12px) 16px 12px;display:flex;align-items:center;gap:10px}
+.coin{width:34px;height:34px;border-radius:50%;background:#fff;color:#0b7a44;font-weight:800;font-size:21px;display:grid;place-items:center}
+h1{font-size:19px;margin:0}
+main{flex:1;overflow:auto;padding:12px 12px 28px}
+nav{display:flex;background:var(--c);border-top:1px solid var(--b);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav button{flex:1;border:0;background:none;color:var(--m);padding:9px 0 7px;font:600 12px system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;gap:3px}
+nav button.on{color:var(--g)}
+nav svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.card{background:var(--c);border:1px solid var(--b);border-radius:14px;padding:14px;margin-bottom:12px}
+.tap:active{background:var(--g2)}
+label{display:block;font-size:13px;color:var(--m);margin:12px 0 4px}
+input,select{width:100%;padding:12px;border:1px solid var(--b);border-radius:10px;font:inherit;background:var(--bg);color:var(--t)}
+input:focus,select:focus{outline:2px solid var(--g);border-color:var(--g)}
+.chk{display:flex;align-items:center;gap:10px;font-size:15px;color:var(--t);margin-top:14px}
+.chk input{width:22px;height:22px;accent-color:var(--g)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.kv small{display:block;font-size:12px;color:var(--m)}
+.kv b{font-size:15px}
+.tot{background:var(--g);color:#fff;border-radius:14px;padding:14px 16px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+.tot b{font-size:22px}
+html .tot{background:#0b7a44}
+.rh{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.g{color:var(--g)}.m{color:var(--m);font-size:13px}
+.sub{font-size:13px;color:var(--m);margin:4px 0 8px}
+.btn{width:100%;padding:14px;border:0;border-radius:12px;background:#0b7a44;color:#fff;font:700 16px system-ui,sans-serif;margin-bottom:10px}
+.btn.out{background:none;border:1.5px solid var(--g);color:var(--g)}
+.btn.red{border-color:var(--r);color:var(--r)}
+.btn.sm{width:auto;padding:8px 14px;font-size:14px}
+.btn:active{opacity:.8}
+.row{display:flex;gap:10px;margin-top:10px}.row .btn{margin:0}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}
+.g2 label{margin:8px 0 3px}
+.rn{font-weight:700}
+.x{border:0;background:none;color:var(--r);font-size:20px;padding:4px 8px}
+.warn{background:var(--w);border-radius:10px;padding:10px 12px;font-size:13px;margin-bottom:12px}
+.ok{background:var(--g2)}
+.empty{text-align:center;color:var(--m);padding:56px 20px}
+.hint{font-size:13px;color:var(--m);margin:0 0 12px}
+#md{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-end;z-index:5}
+#md.on{display:flex}
+#md>div{background:var(--c);width:100%;max-height:92%;overflow:auto;border-radius:18px 18px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px))}
+h3{font-size:15px;margin:18px 0 6px;color:var(--g)}
+.kr{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid var(--b);font-size:14px}
+.kr span{color:var(--m)}.kr b{text-align:right}
+.tw{overflow-x:auto;margin:0 -4px}
+.tb{border-collapse:collapse;font-size:12.5px;min-width:100%;white-space:nowrap}
+.tb th,.tb td{padding:7px 8px;border-bottom:1px solid var(--b);text-align:right}
+.tb th:first-child,.tb td:first-child{text-align:left;position:sticky;left:0;background:var(--c)}
+.tb th{color:var(--m);font-weight:600;background:var(--g2)}
+.tb tr.tt td{font-weight:800;background:var(--g2)}
+html,body{overscroll-behavior:none}
+main{overscroll-behavior:contain}
+input[type=number]{-moz-appearance:textfield}
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+input,select{min-height:48px}
+nav button{min-height:56px}
+nav button.on{box-shadow:inset 0 3px 0 var(--g)}
+.tot b,.kv b,.rh b,.tb td,.mini span{font-variant-numeric:tabular-nums}
+.chips{display:flex;gap:8px;overflow-x:auto;margin:0 -12px 10px;padding:2px 12px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;min-height:44px;border:1.5px solid var(--b);background:var(--c);color:var(--t);border-radius:22px;padding:0 16px;font:600 14px system-ui,sans-serif}
+.chip.on{background:#0b7a44;border-color:#0b7a44;color:#fff}
+.sec{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--g);margin:18px 0 0}
+.sec.f{margin-top:0}
+.g2>*{min-width:0}
+.stk{position:sticky;top:0;z-index:3;margin:-12px -12px 10px;padding:10px 12px;background:var(--bg)}
+.stk .tot{margin:0;box-shadow:0 3px 12px rgba(0,0,0,.18)}
+.tot small{display:block;font-size:12px;opacity:.85;font-weight:400}
+.bar{position:sticky;bottom:0;z-index:3;display:flex;gap:10px;margin:8px -12px -28px;padding:14px 12px calc(10px + 4px);background:linear-gradient(transparent,var(--bg) 28%)}
+.bar .btn{margin:0;flex:1}
+.mini{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;margin:8px 0}
+.mini small{display:block;font-size:11px;color:var(--m)}
+.mini span{font-size:14px}
+details.card summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:8px;min-height:44px;cursor:pointer}
+details.card summary::-webkit-details-marker{display:none}
+details.card summary::after{content:'▾';color:var(--m)}
+details[open].card summary::after{content:'▴'}
+.dbody{margin-top:6px}
+.x{min-width:44px;min-height:44px}
+#md>div::before{content:"";display:block;width:42px;height:4px;border-radius:2px;background:var(--b);margin:0 auto 12px}
+#ts{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#13211a;color:#fff;padding:10px 18px;border-radius:20px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:9}
+#ts.on{opacity:1}
+</style>
+</head>
+<body>
+<header><div class="coin">$</div><h1 id="ttl">Hitung Refund</h1></header>
+<main></main>
+<nav>
+<button data-t="hitung" class="on"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h2m4 0h2M8 16h2m4 0h2"/></svg>Hitung</button>
+<button data-t="history"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>History</button>
+<button data-t="db"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3 3 7 3s7-1.3 7-3v-6"/></svg>Database</button>
+</nav>
+<div id="md"></div><div id="ts"></div>
+<script>
+//<core
+const R=(n,as=0,pf=0,pp=0,af=0,ap=0,ino=0,pq=0)=>({n,as,pf,pp,af,ap,ino,pq});
+const sum=(a,k)=>a.reduce((x,r)=>x+(+r[k]||0),0);
+const SEED=()=>[
+{n:'Hyundai',ap:25,adm:0,roles:[R('Office',46.5,0,0,0,23.25),R('Operational Director',2.5,500000,0,0,1.25),R('OM',5,0,0,0,2.5,0,12.5),R('BM',10,0,25,0,17.5),R('SPV',6,0,25,0,15.5),R('Sales',30,0,50,0,40,1000000),R('Cad Dana Program',0,250000)]},
+{n:'Hyundai (tanpa SPV)',ap:25,adm:0,roles:[R('Office',52.5,0,0,0,26.25),R('Operational Director',2.5,500000,0,0,1.25),R('OM',5,0,0,0,2.5,0,12.5),R('BM',10,0,50,0,30),R('Sales',30,0,50,0,40,1000000),R('Cad Dana Program',0,250000)]},
+{n:'Jaecoo',ap:25,adm:4000000,roles:[R('Perusahaan',50),R('Sales',25,0,60,0,60),R('Supervisor (SPV)',10,0,20,0,20),R('Sales Head (BM)',10,0,20,0,20),R('Chief Territory (OM)',5)]},
+{n:'Daihatsu (Non-Terios, Medium)',ap:25,adm:0,roles:[R('Office',100),R('OM',0,750000),R('BM',0,0,20),R('SPV',0,0,22.5),R('Sales',0,0,57.5,0,0,1000000),R('Cad Dana Program',0,700000)]},
+{n:'BYD',ap:25,adm:0,roles:[R('Owner',40,0,0,800000),R('Office',4,0,0,80000),R('President Director',2.5,0,0,50000),R('Operational Director',0,750000),R('OM',5,0,0,100000,0,0,12.5),R('BM',10,0,25,200000,25),R('SPV',6,0,25,120000,25),R('Sales',30,0,50,600000,50),R('Cad Dana Program',2.5,500000,0,50000)]},
+{n:'BYD (tanpa SPV)',ap:25,adm:0,roles:[R('Owner',40,0,0,800000),R('Office',10,0,0,200000),R('President Director',2.5,0,0,50000),R('Operational Director',0,750000),R('OM',5,0,0,100000,0,0,12.5),R('BM',10,0,50,200000,50),R('Sales',30,0,50,600000,50),R('Cad Dana Program',2.5,500000,0,50000)]},
+{n:'Cherry',ap:25,adm:4000000,roles:[R('Perusahaan',50,0,50),R('Sales',25,0,25,1000000,0,1000000),R('Supervisor',10,0,10),R('Sales Head/BM',10,0,10),R('Chief Territory',5,0,5)]},
+{n:'Mitsubishi',ap:25,adm:4000000,roles:[R('Office',42.5,0,17,425000),R('Owner',20,0,8,200000),R('Owner (2)',7.5,0,3,75000),R('OM/GM',5,0,2,50000),R('BM',0,0,0,1200000),R('SM',0,0,0,500000),R('SPV',7.5,0,0,1000000),R('Sales',17.5,0,70,50000,0,1000000),R('Cad Dana Program',0,0,0,500000)]},
+{n:'Auto2000',ap:25,adm:4000000,roles:[R('Office',31.6),R('BM',8.5,0,50,1662500),R('SPV',9.4),R('Sales',46.8,0,50,1662500),R('ADH',3.7),R('Cad Dana Program',0,0,0,675000)]},
+{n:'Anzon',ap:25,adm:0,roles:[R('Office',100),R('BM',0,1000000),R('Sales',0,0,100,0,0,1000000),R('Cad Dana Program',0,300000)]}
+];
+function calc(s,f){
+ const pv=f.pv??5.5,bp=pv>=3?1.5:1,kp=Math.max(pv-bp,0);
+ const ph=(f.otr||0)-(f.dp||0),pk=ph*kp/100,pt=ph*pv/100,bca=ph*Math.min(bp,pv)/100,ao=Math.max((f.ins||0)-(f.tlp||0),0),ap=ao*s.ap/100,adm=f.adm||0;
+ const fp=sum(s.roles,'pf'),fq=pk*sum(s.roles,'pq')/100,fa=sum(s.roles,'af');
+ const rem=Math.max(pk-fp-fq,0),radm=Math.max(adm-fa,0);
+ const rows=s.roles.map(r=>{const a=ap*r.as/100,p=(+r.pf||0)+pk*(+r.pq||0)/100+rem*r.pp/100,d=(+r.af||0)+radm*r.ap/100,i=f.ino?(+r.ino||0):0;return{n:r.n,a,p,d,i,t:a+p+d+i}});
+ return{ph,pt,pk,bca,bp,kp,ao,ap,rows,total:sum(rows,'t'),sisa:adm-sum(rows,'d')};
+}
+//core>
+const $=s=>document.querySelector(s);
+const fmt=n=>new Intl.NumberFormat('id-ID',{maximumFractionDigits:0}).format(Math.round(n||0));
+const fd=n=>new Intl.NumberFormat('id-ID',{minimumFractionDigits:2,maximumFractionDigits:2}).format(Math.round((n||0)*100)/100);
+const rp=n=>(n<0?'-':'')+'Rp '+fd(Math.abs(n));
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const dt=d=>new Date(d).toLocaleString('id-ID',{dateStyle:'medium',timeStyle:'short'});
+const LS=k=>{try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}};
+const SV=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+const cl=o=>JSON.parse(JSON.stringify(o));
+const toast=t=>{const e=$('#ts');e.textContent=t;e.classList.add('on');setTimeout(()=>e.classList.remove('on'),1800)};
+let S=LS('rf_s')||SEED(),H=LS('rf_h')||[],sel=Math.min(+LS('rf_sel')||0,S.length-1),tab='hitung',E=null;
+const V0=LS('rf_v')||0;
+if(V0<4){SEED().forEach(x=>{const i=S.findIndex(y=>y.n==x.n);if(i<0)S.push(x);else if((x.n.startsWith('Hyundai')&&V0<3)||x.n.startsWith('BYD'))S[i]=x});SV('rf_s',S);SV('rf_v',4)}
+const newF=()=>({name:'',otr:0,dp:0,tenor:4,pv:5.5,ins:0,tlp:0,ab:S[sel].adm||0,adm:0,ino:S[sel].roles.some(r=>r.ino>0),names:{}});
+let F=newF(),EH=null,F0=null;
+const cs=()=>EH?EH.s:S[sel];
+function exitEdit(){if(EH){F=F0||newF();EH=null;F0=null}}
+const chips=()=>(EH?`<button class="chip${EH.pick=='snap'?' on':''}" data-a=pick data-i=snap>${esc(EH.snap.n)} ✓</button>`:'')+S.map((x,i)=>`<button class="chip${(EH?EH.pick==i:i==sel)?' on':''}" data-a=pick data-i=${i}>${esc(x.n)}</button>`).join('');
+const rec=h=>{const d=h.det,c=d.c;return{F:{name:d.f.name||'',otr:d.f.otr||0,dp:d.f.dp||0,tenor:d.f.tenor||4,pv:d.f.pv??5.5,ins:c.ins,tlp:c.tlp,ab:c.ab,adm:c.adm,ino:d.f.ino??d.rows.some(r=>r.i>0),names:Object.fromEntries(d.rows.map((r,i)=>[i,r.nm||'']))},s:{n:d.s,ap:c.apc,adm:c.ab,roles:cl(d.roles)}}};
+const kv=(l,v)=>`<div class=kv><small>${l}</small><b>${rp(v)}</b></div>`;
+
+function go(t){if(t!='hitung')exitEdit();tab=t;E=null;document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t==t));
+ $('#ttl').textContent={hitung:EH?'Edit Perhitungan':'Hitung Refund',history:'Riwayat',db:'Database Skema'}[t];
+ ({hitung:vHitung,history:vHist,db:vDB})[t]();$('main').scrollTop=0}
+
+function vHitung(){
+ const f=(l,k,ph)=>`<div><label>${l}</label><input data-f="${k}" inputmode="numeric" placeholder="${ph||'0'}" value="${F[k]?fmt(F[k]):''}"></div>`;
+ $('main').innerHTML=`<div class=stk id=stk></div>${EH?'<div class=warn>✎ Mengedit riwayat tersimpan. Ubah data lalu tekan <b>Simpan</b>.</div>':''}
+ <div class=chips id=ch>${chips()}</div>
+ <div class=card><div class="sec f">Kendaraan</div>
+ <label>Nama konsumen (opsional)</label><input id=nm value="${esc(F.name)}" placeholder="Contoh: Budi">
+ <div class=g2>${f('Harga OTR (Rp)','otr','369.400.000')}${f('DP murni (Rp)','dp','110.820.000')}</div><div class=m id=dpp style="margin-top:4px"></div>
+ <div class=g2><div><label>Tenor (tahun)</label><select id=tn>${[1,2,3,4,5,6,7].map(n=>`<option${n==F.tenor?' selected':''}>${n}</option>`).join('')}</select></div><div><label>Provisi total (%)</label><input data-pv type=number inputmode=decimal step=any value="${F.pv}"></div></div><div class=m id=pvi style="margin-top:4px"></div>
+ <div class=sec>Asuransi</div><div class=g2>${f('Total asuransi (Rp)','ins','16.268.376')}${f('TLP (Rp)','tlp','2.955.200')}</div>
+ <div class=sec>Admin</div><div class=g2>${f('Admin dasar (tidak dihitung)','ab')}${f('Upping admin (dibagikan)','adm')}</div>
+ <label class=chk><input type=checkbox id=ino ${F.ino?'checked':''}>Innatura tahunan berlaku</label>
+ ${EH?'':'<button class="btn out sm" data-a=rz style="margin:14px 0 0">↺ Kosongkan isian</button>'}</div>
+ <div id=res></div>
+ <div class=bar>${EH?'<button class="btn out red" data-a=cx>Batal</button>':''}<button class="btn out" data-a=dtl>Detail</button><button class=btn data-a=${EH?'she':'sv'}>Simpan</button></div>`;
+ upd();
+ const on=document.querySelector('.chip.on');if(on&&on.scrollIntoView)on.scrollIntoView({inline:'center',block:'nearest'});
+}
+function upd(){
+ const s=cs(),c=calc(s,F);
+ $('#stk').innerHTML=`<div class=tot><span>Total komisi<small>${esc(s.n)} · tenor ${F.tenor} th</small></span><b>${rp(c.total)}</b></div>`;
+ $('#dpp').textContent=F.otr?`DP ${(F.dp/F.otr*100).toFixed(1)}% · PH awal ${rp(c.ph)}`:'';
+ $('#pvi').textContent=`Ke BCA ${c.bp}% · Dibagikan ${+c.kp.toFixed(2)}%`;
+ $('#res').innerHTML=`<div class=card><div class=grid>${kv('PH awal',c.ph)}${kv('Provisi total '+F.pv+'%',c.pt)}${kv('Ke BCA '+c.bp+'%',c.bca)}${kv('Provisi dibagikan',c.pk)}${kv('Asuransi keluar',c.ao)}${kv('Pool asuransi '+s.ap+'%',c.ap)}${kv('Admin dasar (tidak dihitung)',F.ab)}${kv('Upping admin dibagikan',F.adm)}</div></div>
+ ${c.rows.map((r,i)=>`<div class=card><div class=rh><b>${esc(r.n)}</b><b class=g>${rp(r.t)}</b></div><div class=mini>${[['Asuransi',r.a],['Provisi',r.p],['Admin',r.d],['Innatura',r.i]].filter(x=>x[1]).map(x=>`<div><small>${x[0]}</small><span>${fd(x[1])}</span></div>`).join('')||'<span class=m>Tidak ada bagian</span>'}</div><input data-n=${i} placeholder="Nama penerima" value="${esc((F.names||{})[i])}"></div>`).join('')}
+ ${Math.abs(c.sisa)>1?`<p class=m>Sisa upping admin yang belum terbagi: ${rp(c.sisa)}</p>`:''}`;
+}
+function vHist(){
+ $('main').innerHTML=H.length?'<input id=hq type=search placeholder="Cari nama atau merek…" style="margin-bottom:12px"><div id=hl></div><button class="btn out red" data-a=hc>Hapus semua riwayat</button>':'<div class=empty>Belum ada riwayat.<br>Hitung dulu, lalu tekan <b>Simpan</b>.</div>';
+ if(H.length)hl();
+}
+function hl(){
+ const q=(($('#hq')||{}).value||'').toLowerCase(),L=H.filter(h=>((h.f.name||'')+' '+h.s).toLowerCase().includes(q));
+ $('#hl').innerHTML=L.map(h=>`<div class="card tap" data-a=hd data-id="${h.id}"><div class=rh><b>${esc(h.f.name||'Tanpa nama')}</b><b class=g>${rp(h.total)}</b></div><div class=sub style="margin:4px 0 0">${esc(h.s)} · ${dt(h.d)}</div></div>`).join('')||'<div class=empty>Tidak ditemukan.</div>';
+}
+const txt=h=>`${h.s} - ${h.f.name||'Tanpa nama'}\n${dt(h.d)}\nOTR ${rp(h.f.otr)} | DP ${rp(h.f.dp)}\nTenor ${h.f.tenor||'-'} thn | Provisi ${h.f.pv??'-'}%\n`+h.rows.map(r=>`${r.n}${r.nm?' ('+r.nm+')':''}: ${rp(r.t)}`).join('\n')+`\nTOTAL: ${rp(h.total)}`;
+function vDB(){
+ if(E)return vEdit();
+ $('main').innerHTML=S.map((s,i)=>`<div class="card tap" data-a=ed data-i=${i}><div class=rh><b>${esc(s.n)}</b><span class=m>Ubah ›</span></div><div class=sub style="margin:4px 0 0">Pool asuransi ${s.ap}% · Admin dasar ${rp(s.adm||0)} · ${s.roles.length} penerima</div></div>`).join('')+
+ `<button class=btn data-a=add>+ Skema baru</button><div class=card><b>Cadangan data</b><p class=hint>Simpan file backup agar skema dan riwayat tidak hilang.</p><div class=row><button class="btn out" data-a=bk>Backup</button><button class="btn out" data-a=rs>Restore</button></div><div class=row><button class="btn out red" data-a=rst>Kembalikan skema bawaan</button></div></div><input type=file id=fl accept=".json" hidden>`;
+}
+const rf=(i,r,k,l)=>`<div><label>${l}</label><input type=number inputmode=decimal step=any data-r="${i}.${k}" value="${r[k]}"></div>`;
+function vEdit(){
+ const e=E.s,f=(l,k)=>`<div><label>${l}</label><input type=number inputmode=decimal step=any data-e=${k} value="${e[k]}"></div>`;
+ $('main').innerHTML=`<button class="btn out sm" data-a=back>‹ Kembali</button><div class=card><label style="margin-top:0">Nama skema</label><input data-e=n value="${esc(e.n)}"><div class=g2>${f('Pool asuransi (%)','ap')}${f('Admin dasar (Rp)','adm')}</div></div>
+ <p class=hint>Provisi normal 5,5%. Jatah BCA 1,5% jika provisi 3% ke atas, 1% jika di bawah 3%. Sisanya dibagikan sesuai tabel di bawah.</p><p class=hint>Nominal tetap dan Provisi % dari total dibayar lebih dulu. Persen (%) lain membagi sisanya. Persen tiap kolom harus total 100.</p><div id=chk></div>
+ ${e.roles.map((r,i)=>`<details class=card${i==E.open?' open':''}><summary><b>${esc(r.n)}</b><span class=m>Asuransi ${+(+r.as||0).toFixed(2)}% · Provisi ${+(+r.pp||0).toFixed(2)}%</span></summary><div class=dbody><label>Nama jabatan</label><input data-r="${i}.n" value="${esc(r.n)}"><div class=g2>${rf(i,r,'as','Asuransi %')}${rf(i,r,'pp','Provisi %')}${rf(i,r,'pq','Provisi % dari total')}${rf(i,r,'pf','Provisi tetap Rp')}${rf(i,r,'ap','Admin %')}${rf(i,r,'af','Admin tetap Rp')}${rf(i,r,'ino','Innatura Rp')}</div><button class="btn out red sm" data-a=dr data-i=${i} style="margin:14px 0 0">Hapus jabatan</button></div></details>`).join('')}
+ <button class="btn out" data-a=ar>+ Tambah jabatan</button><div class=row><button class="btn out" data-a=dup>Duplikat skema</button><button class="btn out red" data-a=del>Hapus skema</button></div>
+ <div class=bar><button class="btn out" data-a=back>Batal</button><button class=btn data-a=sv2>Simpan skema</button></div>`;
+ chk();
+}
+function chk(){
+ const r=E.s.roles,w=[],a=sum(r,'as'),p=sum(r,'pp'),d=sum(r,'ap');
+ if(Math.abs(a-100)>.01)w.push(`Asuransi % total ${+a.toFixed(2)}, harus 100`);
+ if(Math.abs(p-100)>.01)w.push(`Provisi % total ${+p.toFixed(2)}, harus 100`);
+ if(d>0&&Math.abs(d-100)>.01)w.push(`Admin % total ${+d.toFixed(2)}, harus 100`);
+ $('#chk').innerHTML=`<div class="warn${w.length?'':' ok'}">${w.length?w.join('<br>'):'✓ Semua persen sudah 100%'}</div>`;
+}
+function showD(h){
+ $('#md').innerHTML=`<div><div class=rh><b>${esc(h.f.name||'Tanpa nama')}</b><button class=x data-a=cl>✕</button></div><div class=sub>${esc(h.s)} · ${dt(h.d)}${h.ed?' · diubah '+dt(h.ed):''}<br>OTR ${rp(h.f.otr)} · DP ${rp(h.f.dp)}<br>Tenor ${h.f.tenor||'-'} thn · Provisi ${h.f.pv??'-'}%</div>
+ ${h.rows.map(r=>`<div class=rh style="padding:7px 0;border-top:1px solid var(--b)"><span>${esc(r.n)}${r.nm?`<br><small class=m>${esc(r.nm)}</small>`:''}</span><b>${rp(r.t)}</b></div>`).join('')}
+ <div class=tot style="margin-top:12px"><span>Total komisi</span><b>${rp(h.total)}</b></div>
+ ${h.det?`<button class="btn out" data-a=hdt data-id="${h.id}">Lihat perhitungan</button>`:'<p class=hint>Riwayat lama belum menyimpan data perhitungan.</p>'}<div class=row><button class="btn out" data-a=cp data-id="${h.id}">Salin teks</button><button class="btn out red" data-a=hx data-id="${h.id}">Hapus</button></div></div>`;
+ $('#md').classList.add('on');
+}
+const pc=n=>+(+n).toFixed(2)+'%';
+function mkDet(s,f,c){return{s:s.n,f:{name:f.name,otr:f.otr,dp:f.dp,tenor:f.tenor,pv:f.pv,ino:!!f.ino},c:{ph:c.ph,pt:c.pt,pk:c.pk,bca:c.bca,bp:c.bp,kp:c.kp,ao:c.ao,ap:c.ap,apc:s.ap,ins:f.ins||0,tlp:f.tlp||0,ab:f.ab||0,adm:f.adm||0,sisa:c.sisa},roles:cl(s.roles),rows:c.rows.map((r,i)=>({...r,nm:(f.names||{})[i]||''})),total:c.total}}
+function renderDet(d){
+ const c=d.c,f=d.f,k=(l,v)=>`<div class=kr><span>${l}</span><b>${v}</b></div>`;
+ const cell=(rpv,q,r,rl)=>[rpv?rp(rpv):'',q?pc(q)+' total':'',r?pc(r)+' '+(rl||'sisa'):''].filter(Boolean).join(' + ')||'-';
+ return `<h3>Rincian perhitungan</h3>
+ ${k('Tenor',(f.tenor||'-')+' tahun')}${k('OTR',rp(f.otr))}${k('DP murni',rp(f.dp))}${k('PH awal',rp(c.ph))}${k('Provisi '+pc(f.pv??5.5),rp(c.pt))}${k('PH akhir',rp(c.ph+c.pt))}
+ ${k('Provisi yang keluar '+pc(c.kp),rp(c.pk))}${k('Provisi ke BCAF '+pc(c.bp),rp(c.bca))}
+ ${k('Asuransi',rp(c.ins))}${k('TLP',rp(c.tlp))}${k('Asuransi yang dapat keluar',rp(c.ao))}${k(pc(c.apc)+' Asuransi',rp(c.ap))}
+ ${k('Admin dasar (tidak dihitung)',rp(c.ab))}${k('Upping admin',rp(c.adm))}${k('Sisa upping belum terbagi',rp(c.sisa))}
+ <h3>Skema refund</h3><div class=tw><table class=tb><tr><th>Komponen</th><th>Asuransi</th><th>Provisi</th><th>Admin</th><th>Innatura</th></tr>
+ ${d.roles.map(r=>`<tr><td>${esc(r.n)}</td><td>${r.as?pc(r.as):'-'}</td><td>${cell(r.pf,r.pq,r.pp)}</td><td>${cell(r.af,0,r.ap)}</td><td>${r.ino?rp(r.ino):'-'}</td></tr>`).join('')}</table></div>
+ <h3>Hasil refund (Rupiah)</h3><div class=tw><table class=tb><tr><th>Komponen</th><th>Nama</th><th>Asuransi</th><th>Provisi</th><th>Admin</th><th>Innatura</th><th>Total</th></tr>
+ ${d.rows.map(r=>`<tr><td>${esc(r.n)}</td><td>${esc(r.nm)||'-'}</td><td>${fd(r.a)}</td><td>${fd(r.p)}</td><td>${fd(r.d)}</td><td>${fd(r.i)}</td><td><b>${fd(r.t)}</b></td></tr>`).join('')}
+ <tr class=tt><td>Total</td><td></td><td>${fd(sum(d.rows,'a'))}</td><td>${fd(sum(d.rows,'p'))}</td><td>${fd(sum(d.rows,'d'))}</td><td>${fd(sum(d.rows,'i'))}</td><td>${fd(d.total)}</td></tr></table></div>`;
+}
+const showDet=(d,back)=>{$('#md').innerHTML=`<div><div class=rh><b>Detail ${esc(d.s)}</b><button class=x data-a=cl>✕</button></div><div class=sub>${esc(d.f.name||'Tanpa nama')}</div>${back||''}${renderDet(d)}</div>`;$('#md').classList.add('on')};
+const saveS=()=>{SV('rf_s',S);if(sel>=S.length)sel=0};
+const A={
+ dtl(){showDet(mkDet(cs(),F,calc(cs(),F)))},
+ he(d){const h=H.find(x=>x.id==d.id);if(!h||!h.det)return;const r=rec(h);F0=F;F=r.F;EH={id:h.id,s:r.s,snap:cl(r.s),pick:'snap'};A.cl();go('hitung')},
+ she(){const i=H.findIndex(x=>x.id==EH.id);if(i<0)return toast('Riwayat tidak ditemukan');const s=cs(),c=calc(s,F),o=H[i];H[i]={...o,s:s.n,f:{name:F.name,otr:F.otr,dp:F.dp,tenor:F.tenor,pv:F.pv},rows:c.rows.map((r,j)=>({n:r.n,t:r.t,nm:(F.names||{})[j]||''})),total:c.total,det:mkDet(s,F,c),ed:new Date().toISOString()};SV('rf_h',H);exitEdit();go('history');toast('Perubahan disimpan')},
+ cx(){exitEdit();go('history')},
+ hdt(d){const h=H.find(x=>x.id==d.id);if(h&&h.det)showDet(h.det,`<div class=row style="margin:0 0 6px"><button class="btn out sm" data-a=hd data-id="${h.id}">‹ Kembali</button><button class="btn sm" data-a=he data-id="${h.id}">✎ Edit</button></div>`)},
+ sv(){const s=cs(),c=calc(s,F);H.unshift({det:mkDet(s,F,c),id:Date.now(),d:new Date().toISOString(),s:s.n,f:{name:F.name,otr:F.otr,dp:F.dp,tenor:F.tenor,pv:F.pv},rows:c.rows.map((r,i)=>({n:r.n,t:r.t,nm:(F.names||{})[i]||''})),total:c.total});SV('rf_h',H);toast('Tersimpan di History')},
+ hd(d){const h=H.find(x=>x.id==d.id);if(h)showD(h)},
+ cl(){$('#md').classList.remove('on')},
+ hx(d){if(!confirm('Hapus riwayat ini?'))return;H=H.filter(x=>x.id!=d.id);SV('rf_h',H);A.cl();vHist()},
+ hc(){if(!confirm('Hapus semua riwayat?'))return;H=[];SV('rf_h',H);vHist()},
+ cp(d){const h=H.find(x=>x.id==d.id);try{navigator.clipboard.writeText(txt(h));toast('Teks tersalin')}catch(e){toast('Gagal menyalin')}},
+ ed(d){E={i:+d.i,s:cl(S[d.i])};vDB()},
+ back(){E=null;vDB()},
+ add(){S.push({n:'Skema baru',ap:25,adm:0,roles:[R('Perusahaan',50,0,0),R('Sales',50,0,100)]});saveS();E={i:S.length-1,s:cl(S[S.length-1])};vDB()},
+ dup(){const c=cl(E.s);c.n+=' (salinan)';S.push(c);saveS();E={i:S.length-1,s:cl(c)};vDB();toast('Skema diduplikat')},
+ del(){if(S.length<2)return toast('Minimal ada 1 skema');if(!confirm('Hapus skema ini?'))return;S.splice(E.i,1);E=null;sel=0;SV('rf_sel',0);saveS();vDB()},
+ sv2(){S[E.i]=cl(E.s);saveS();E=null;toast('Skema disimpan');vDB()},
+ ar(){E.s.roles.push(R('Jabatan baru'));E.open=E.s.roles.length-1;vEdit()},
+ pick(d){if(EH){EH.pick=d.i;EH.s=d.i=='snap'?cl(EH.snap):cl(S[+d.i]);F.names={}}else{const k=F;sel=+d.i;SV('rf_sel',sel);F=newF();Object.assign(F,{name:k.name,otr:k.otr,dp:k.dp,tenor:k.tenor,pv:k.pv,ins:k.ins,tlp:k.tlp,adm:k.adm})}vHitung()},
+ rz(){if(!confirm('Kosongkan semua isian?'))return;F=newF();vHitung()},
+ dr(d){E.s.roles.splice(+d.i,1);vEdit()},
+ bk(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify({S,H})],{type:'application/json'}));a.download='backup-refund.json';a.click()},
+ rs(){$('#fl').click()},
+ rst(){if(!confirm('Kembalikan semua skema ke bawaan? Perubahan Anda akan hilang.'))return;S=SEED();sel=0;saveS();SV('rf_sel',0);vDB()}
+};
+const main=$('main');
+main.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(b&&A[b.dataset.a])A[b.dataset.a](b.dataset)});
+$('#md').addEventListener('click',e=>{if(e.target.id=='md')A.cl();const b=e.target.closest('[data-a]');if(b&&A[b.dataset.a])A[b.dataset.a](b.dataset)});
+main.addEventListener('input',e=>{const t=e.target,d=t.dataset;
+ if(d.f){const v=t.value.replace(/\D/g,'');F[d.f]=+v||0;t.value=v?fmt(+v):'';upd()}
+ else if(d.pv!=null){F.pv=t.value===''?0:+t.value;upd()}
+ else if(t.id=='hq')hl();
+ else if(t.id=='nm')F.name=t.value;
+ else if(d.n!=null)(F.names=F.names||{})[d.n]=t.value;
+ else if(d.e){E.s[d.e]=d.e=='n'?t.value:(+t.value||0)}
+ else if(d.r){const[i,k]=d.r.split('.');E.s.roles[i][k]=k=='n'?t.value:(+t.value||0);chk()}});
+main.addEventListener('change',e=>{const t=e.target;
+ if(t.id=='sc'){if(EH){EH.pick=t.value;EH.s=t.value=='snap'?cl(EH.snap):cl(S[+t.value]);F.names={};vHitung()}else{sel=+t.value;SV('rf_sel',sel);F=newF();vHitung()}}
+ else if(t.id=='ino'){F.ino=t.checked;upd()}
+ else if(t.id=='tn')F.tenor=+t.value;
+ else if(t.id=='fl'&&t.files[0]){const r=new FileReader();r.onload=()=>{try{const o=JSON.parse(r.result);if(!Array.isArray(o.S)||!o.S.length)throw 0;S=o.S;H=Array.isArray(o.H)?o.H:[];sel=0;SV('rf_h',H);saveS();vDB();toast('Data dipulihkan')}catch(x){toast('File backup tidak valid')}};r.readAsText(t.files[0])}});
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>go(b.dataset.t));
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+go('hitung');
+</script>
+</body>
+</html>
